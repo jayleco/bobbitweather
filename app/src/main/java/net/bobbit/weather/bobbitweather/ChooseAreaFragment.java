@@ -2,6 +2,7 @@ package net.bobbit.weather.bobbitweather;
 
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -31,8 +32,6 @@ import java.util.List;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
-
-import static android.R.attr.type;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -80,6 +79,12 @@ public class ChooseAreaFragment extends Fragment {
                 } else if (currentLevel == LEVEL_CITY) {
                     selectedCity = cityList.get(i);
                     queryCounties();
+                } else if (currentLevel == LEVEL_COUNTY) {
+                    String weatherId = countyList.get(i).getWeatherId();
+                    Intent intent = new Intent(getActivity(), WeatherActivity.class);
+                    intent.putExtra("weather_id", weatherId);
+                    startActivity(intent);
+                    getActivity().finish();
                 }
             }
         });
@@ -170,7 +175,7 @@ public class ChooseAreaFragment extends Fragment {
      * 根據傳入的 地址和類型從服務器上查詢省市縣數據
      *
      * @param address
-     * @param city
+     * @param type
      */
     private void queryFromeServer(String address, final String type) {
         showProgressDialog();
